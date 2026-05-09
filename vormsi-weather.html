@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rälby Weather — Vormsi</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #0f1923;
+      color: #e8edf2;
+      min-height: 100vh;
+      padding: 1.5rem;
+    }
+
+    .back {
+      display: inline-block;
+      color: #7a9ab5;
+      text-decoration: none;
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.02em;
+    }
+    .back:hover { color: #aac8e0; }
+
+    .container { max-width: 680px; margin: 0 auto; }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+    .subtitle {
+      color: #7a9ab5;
+      font-size: 0.9rem;
+      margin-top: 0.2rem;
+    }
+
+    #status {
+      margin-top: 1.5rem;
+      color: #7a9ab5;
+      font-size: 0.9rem;
+    }
+
+    /* Current weather */
+    .current {
+      margin-top: 1.5rem;
+      background: #1a2a3a;
+      border-radius: 14px;
+      padding: 1.75rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .current-icon { font-size: 4rem; line-height: 1; }
+    .current-right { flex: 1; }
+    .current-temp {
+      font-size: 3.5rem;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -2px;
+    }
+    .current-desc {
+      font-size: 1rem;
+      color: #aac8e0;
+      margin-top: 0.3rem;
+      text-transform: capitalize;
+    }
+    .current-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 1.5rem;
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: #7a9ab5;
+    }
+    .current-meta span b { color: #c5dde8; }
+
+    /* Hourly */
+    .section-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #7a9ab5;
+      margin-top: 1.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .hourly-scroll {
+      display: flex;
+      gap: 0.75rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+      scrollbar-width: thin;
+      scrollbar-color: #2a3d50 transparent;
+    }
+    .hourly-scroll::-webkit-scrollbar { height: 4px; }
+    .hourly-scroll::-webkit-scrollbar-thumb { background: #2a3d50; border-radius: 2px; }
+
+    .hour-card {
+      background: #1a2a3a;
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      text-align: center;
+      min-width: 70px;
+      flex-shrink: 0;
+    }
+    .hour-card.now { border: 1px solid #3a6080; }
+    .hour-time  { font-size: 0.75rem; color: #7a9ab5; }
+    .hour-icon  { font-size: 1.5rem; margin: 0.3rem 0; }
+    .hour-temp  { font-size: 1rem; font-weight: 600; }
+    .hour-rain  { font-size: 0.7rem; color: #5b9ac4; margin-top: 0.15rem; }
+
+    /* Daily */
+    .daily-list { display: flex; flex-direction: column; gap: 0.5rem; }
+    .day-row {
+      background: #1a2a3a;
+      border-radius: 10px;
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .day-name  { width: 3.5rem; font-size: 0.9rem; color: #aac8e0; }
+    .day-icon  { font-size: 1.4rem; width: 2rem; text-align: center; }
+    .day-desc  { flex: 1; font-size: 0.82rem; color: #7a9ab5; }
+    .day-temps { font-size: 0.9rem; white-space: nowrap; }
+    .day-min   { color: #7a9ab5; }
+
+    .updated {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #3a5570;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a class="back" href="index.html">← All tools</a>
+
+    <h1>Rälby, Vormsi</h1>
+    <div class="subtitle">Weather — Estonia</div>
+
+    <div id="status">Loading weather data…</div>
+
+    <div id="weather" style="display:none">
+      <div class="current">
+        <div class="current-icon" id="cur-icon"></div>
+        <div class="current-right">
+          <div class="current-temp" id="cur-temp"></div>
+          <div class="current-desc" id="cur-desc"></div>
+          <div class="current-meta" id="cur-meta"></div>
+        </div>
+      </div>
+
+      <div class="section-title">Next 24 hours</div>
+      <div class="hourly-scroll" id="hourly"></div>
+
+      <div class="section-title">7-day forecast</div>
+      <div class="daily-list" id="daily"></div>
+
+      <div class="updated" id="updated"></div>
+    </div>
+  </div>
+
+  <script>
+    const LAT = 59.0167, LON = 23.2167;
+
+    const WMO = {
+      0:  ['☀️',  'Clear sky'],
+      1:  ['🌤️', 'Mainly clear'],
+      2:  ['⛅',  'Partly cloudy'],
+      3:  ['☁️',  'Overcast'],
+      45: ['🌫️', 'Fog'],
+      48: ['🌫️', 'Icy fog'],
+      51: ['🌦️', 'Light drizzle'],
+      53: ['🌦️', 'Drizzle'],
+      55: ['🌧️', 'Heavy drizzle'],
+      61: ['🌧️', 'Light rain'],
+      63: ['🌧️', 'Rain'],
+      65: ['🌧️', 'Heavy rain'],
+      71: ['🌨️', 'Light snow'],
+      73: ['🌨️', 'Snow'],
+      75: ['❄️',  'Heavy snow'],
+      77: ['🌨️', 'Snow grains'],
+      80: ['🌦️', 'Light showers'],
+      81: ['🌧️', 'Rain showers'],
+      82: ['⛈️',  'Heavy showers'],
+      85: ['🌨️', 'Snow showers'],
+      86: ['🌨️', 'Heavy snow showers'],
+      95: ['⛈️',  'Thunderstorm'],
+      96: ['⛈️',  'Thunderstorm w/ hail'],
+      99: ['⛈️',  'Thunderstorm w/ heavy hail'],
+    };
+
+    function wmo(code) {
+      return WMO[code] || ['🌡️', 'Unknown'];
+    }
+
+    function fmt(n, unit = '°') { return `${Math.round(n)}${unit}`; }
+
+    function hourLabel(iso) {
+      const d = new Date(iso);
+      const h = d.getHours();
+      return h === 0 ? 'midnight' : h === 12 ? 'noon' : `${h}:00`;
+    }
+
+    function dayLabel(iso, idx) {
+      if (idx === 0) return 'Today';
+      if (idx === 1) return 'Tmrw';
+      return new Date(iso).toLocaleDateString('en', { weekday: 'short' });
+    }
+
+    async function load() {
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}` +
+        `&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,wind_direction_10m,precipitation,weathercode,is_day` +
+        `&hourly=temperature_2m,weathercode,precipitation_probability&hourly_units=temperature_2m=°C` +
+        `&daily=temperature_2m_max,temperature_2m_min,weathercode,precipitation_sum,wind_speed_10m_max` +
+        `&wind_speed_unit=ms&timezone=Europe%2FTallinn&forecast_days=7`;
+
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.json();
+    }
+
+    function windDir(deg) {
+      const dirs = ['N','NE','E','SE','S','SW','W','NW'];
+      return dirs[Math.round(deg / 45) % 8];
+    }
+
+    function render(d) {
+      document.getElementById('status').style.display = 'none';
+      document.getElementById('weather').style.display = '';
+
+      const c = d.current;
+      const [icon, desc] = wmo(c.weathercode);
+      document.getElementById('cur-icon').textContent = icon;
+      document.getElementById('cur-temp').textContent = fmt(c.temperature_2m) + 'C';
+      document.getElementById('cur-desc').textContent = desc;
+      document.getElementById('cur-meta').innerHTML = `
+        <span>Feels like <b>${fmt(c.apparent_temperature)}°C</b></span>
+        <span>Humidity <b>${fmt(c.relative_humidity_2m, '%')}</b></span>
+        <span>Wind <b>${fmt(c.wind_speed_10m, ' m/s')} ${windDir(c.wind_direction_10m)}</b></span>
+        <span>Precip <b>${c.precipitation} mm</b></span>
+      `;
+
+      // Hourly — next 24h from current hour
+      const nowIdx = d.hourly.time.findIndex(t => t >= d.current_weather_units && new Date(t) >= new Date(d.current.time.slice(0,13)+':00'));
+      const startIdx = Math.max(0, d.hourly.time.findIndex(t => new Date(t) >= new Date(d.current.time.slice(0,14)+'00')));
+      const hourlyEl = document.getElementById('hourly');
+      hourlyEl.innerHTML = '';
+      for (let i = startIdx; i < Math.min(startIdx + 25, d.hourly.time.length); i++) {
+        const [hIcon] = wmo(d.hourly.weathercode[i]);
+        const isNow = i === startIdx;
+        const rain = d.hourly.precipitation_probability[i];
+        hourlyEl.innerHTML += `
+          <div class="hour-card${isNow ? ' now' : ''}">
+            <div class="hour-time">${isNow ? 'Now' : hourLabel(d.hourly.time[i])}</div>
+            <div class="hour-icon">${hIcon}</div>
+            <div class="hour-temp">${fmt(d.hourly.temperature_2m[i])}°</div>
+            ${rain > 0 ? `<div class="hour-rain">💧${rain}%</div>` : '<div class="hour-rain"> </div>'}
+          </div>`;
+      }
+
+      // Daily
+      const dailyEl = document.getElementById('daily');
+      dailyEl.innerHTML = '';
+      d.daily.time.forEach((t, i) => {
+        const [dIcon, dDesc] = wmo(d.daily.weathercode[i]);
+        dailyEl.innerHTML += `
+          <div class="day-row">
+            <div class="day-name">${dayLabel(t, i)}</div>
+            <div class="day-icon">${dIcon}</div>
+            <div class="day-desc">${dDesc}${d.daily.precipitation_sum[i] > 0 ? ` · ${d.daily.precipitation_sum[i]} mm` : ''}</div>
+            <div class="day-temps">${fmt(d.daily.temperature_2m_max[i])}° <span class="day-min">/ ${fmt(d.daily.temperature_2m_min[i])}°</span></div>
+          </div>`;
+      });
+
+      document.getElementById('updated').textContent =
+        'Updated ' + new Date().toLocaleTimeString('en', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    load()
+      .then(render)
+      .catch(err => {
+        document.getElementById('status').textContent = 'Failed to load weather: ' + err.message;
+      });
+  </script>
+</body>
+</html>
