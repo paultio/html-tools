@@ -15,10 +15,6 @@
       --muted: #666;
       --accent: #1d4ed8;
       --radius: 10px;
-      --level-info: #2563eb;
-      --level-warn: #d97706;
-      --level-error: #dc2626;
-      --level-debug: #7c3aed;
     }
 
     body {
@@ -36,16 +32,12 @@
       align-items: center;
       gap: 1rem;
     }
-    header a {
-      color: #aaa;
-      text-decoration: none;
-      font-size: 0.9rem;
-    }
+    header a { color: #aaa; text-decoration: none; font-size: 0.9rem; }
     header a:hover { color: #fff; }
     header h1 { font-size: 1.4rem; font-weight: 700; }
     header .sep { color: #555; }
 
-    main { max-width: 1000px; margin: 2rem auto; padding: 0 1.25rem; }
+    main { max-width: 1000px; margin: 2rem auto; padding: 0 1.25rem 3rem; }
 
     /* ── Drop zone ─────────────────────────────────── */
     #drop-zone {
@@ -57,55 +49,30 @@
       cursor: pointer;
       transition: border-color 0.15s, background 0.15s;
     }
-    #drop-zone.drag-over {
-      border-color: var(--accent);
-      background: #eff6ff;
-    }
+    #drop-zone.drag-over { border-color: var(--accent); background: #eff6ff; }
     #drop-zone svg { width: 48px; height: 48px; stroke: #aaa; margin-bottom: 1rem; }
     #drop-zone p { color: var(--muted); font-size: 0.95rem; }
     #drop-zone strong { color: var(--text); }
     #file-input { display: none; }
 
     /* ── Toolbar ───────────────────────────────────── */
-    #toolbar {
-      display: none;
-      align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 1rem;
-      flex-wrap: wrap;
-    }
+    #toolbar { display: none; align-items: center; gap: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap; }
     #toolbar.visible { display: flex; }
     #file-info { font-size: 0.85rem; color: var(--muted); }
     #file-info strong { color: var(--text); }
     #log-type-badge {
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 0.2rem 0.6rem;
-      border-radius: 99px;
-      background: #dbeafe;
-      color: #1e40af;
+      font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem;
+      border-radius: 99px; background: #dbeafe; color: #1e40af;
     }
     .spacer { flex: 1; }
     #search-input {
-      padding: 0.4rem 0.75rem;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-size: 0.875rem;
-      width: 200px;
+      padding: 0.4rem 0.75rem; border: 1px solid var(--border);
+      border-radius: 6px; font-size: 0.875rem; width: 200px;
     }
-    #level-filter {
-      padding: 0.4rem 0.6rem;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-size: 0.875rem;
-    }
+    #level-filter { padding: 0.4rem 0.6rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.875rem; }
     #reset-btn {
-      padding: 0.4rem 0.9rem;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      background: var(--surface);
-      font-size: 0.875rem;
-      cursor: pointer;
+      padding: 0.4rem 0.9rem; border: 1px solid var(--border);
+      border-radius: 6px; background: var(--surface); font-size: 0.875rem; cursor: pointer;
     }
     #reset-btn:hover { background: var(--bg); }
 
@@ -113,16 +80,36 @@
     #log-output { display: none; }
     #log-output.visible { display: block; }
 
+    /* ── Divider ───────────────────────────────────── */
+    .section-divider {
+      display: flex; align-items: center; gap: 1rem;
+      margin: 2rem 0 1.5rem; color: #aaa; font-size: 0.85rem;
+    }
+    .section-divider::before, .section-divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    /* ── Paste panel ───────────────────────────────── */
+    #paste-panel { margin-top: 0; }
+    .paste-label {
+      font-size: 0.8rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.05em; color: var(--muted); margin-bottom: 0.5rem;
+    }
+    #paste-textarea {
+      width: 100%; min-height: 90px; padding: 0.75rem;
+      border: 1px solid var(--border); border-radius: var(--radius);
+      font-family: ui-monospace, monospace; font-size: 0.8rem;
+      resize: vertical; background: var(--surface);
+      transition: border-color 0.15s;
+    }
+    #paste-textarea:focus { outline: none; border-color: var(--accent); }
+    #paste-result { margin-top: 1rem; }
+
     /* ── Chat log ──────────────────────────────────── */
     .session-meta {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1rem 1.25rem;
-      margin-bottom: 1.25rem;
-      display: flex;
-      gap: 1.5rem;
-      flex-wrap: wrap;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1rem 1.25rem;
+      margin-bottom: 1.25rem; display: flex; gap: 1.5rem; flex-wrap: wrap;
     }
     .meta-item { font-size: 0.85rem; }
     .meta-item .label { color: var(--muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
@@ -130,102 +117,44 @@
 
     .chat-container { display: flex; flex-direction: column; gap: 1rem; }
 
-    .msg-system {
-      background: #f8f8f8;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
+    .msg-system { background: #f8f8f8; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
     .msg-system-header {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.65rem 1rem;
-      cursor: pointer;
-      user-select: none;
-      font-size: 0.85rem;
-      color: var(--muted);
-      font-weight: 500;
+      display: flex; align-items: center; gap: 0.5rem; padding: 0.65rem 1rem;
+      cursor: pointer; user-select: none; font-size: 0.85rem; color: var(--muted); font-weight: 500;
     }
     .msg-system-header:hover { background: #f0f0f0; }
     .toggle-arrow { transition: transform 0.2s; display: inline-block; }
     .msg-system.open .toggle-arrow { transform: rotate(90deg); }
     .msg-system-body {
-      display: none;
-      padding: 1rem;
-      font-size: 0.8rem;
-      white-space: pre-wrap;
-      font-family: ui-monospace, monospace;
-      border-top: 1px solid var(--border);
-      max-height: 400px;
-      overflow-y: auto;
-      line-height: 1.5;
-      color: #444;
+      display: none; padding: 1rem; font-size: 0.8rem; white-space: pre-wrap;
+      font-family: ui-monospace, monospace; border-top: 1px solid var(--border);
+      max-height: 400px; overflow-y: auto; line-height: 1.5; color: #444;
     }
     .msg-system.open .msg-system-body { display: block; }
 
-    .msg-row {
-      display: flex;
-      gap: 0.75rem;
-      align-items: flex-start;
-    }
+    .msg-row { display: flex; gap: 0.75rem; align-items: flex-start; }
     .msg-row.user { flex-direction: row-reverse; }
 
     .msg-avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: #fff;
+      width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 700; color: #fff;
     }
     .msg-row.user .msg-avatar { background: #1d4ed8; }
     .msg-row.assistant .msg-avatar { background: #059669; }
 
-    .msg-bubble {
-      max-width: 80%;
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
-    .msg-row.user .msg-bubble {
-      background: #dbeafe;
-      padding: 0.75rem 1rem;
-    }
-    .msg-row.assistant .msg-bubble {
-      background: var(--surface);
-      border: 1px solid var(--border);
-    }
+    .msg-bubble { max-width: 80%; border-radius: var(--radius); overflow: hidden; }
+    .msg-row.user .msg-bubble { background: #dbeafe; padding: 0.75rem 1rem; }
+    .msg-row.assistant .msg-bubble { background: var(--surface); border: 1px solid var(--border); }
     .msg-text { font-size: 0.9rem; line-height: 1.5; }
-    .msg-time {
-      font-size: 0.72rem;
-      color: var(--muted);
-      margin-top: 0.35rem;
-    }
+    .msg-time { font-size: 0.72rem; color: var(--muted); margin-top: 0.35rem; }
     .msg-row.user .msg-time { text-align: right; }
 
-    /* assistant mission */
-    .mission-header {
-      padding: 0.75rem 1rem 0.5rem;
-      border-bottom: 1px solid var(--border);
-    }
-    .mission-explanation {
-      font-size: 0.88rem;
-      color: #444;
-      line-height: 1.45;
-    }
+    .mission-header { padding: 0.75rem 1rem 0.5rem; border-bottom: 1px solid var(--border); }
+    .mission-explanation { font-size: 0.88rem; color: #444; line-height: 1.45; }
     .mission-body { padding: 0.75rem 1rem; }
     .mission-commands { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
-    .cmd-chip {
-      font-size: 0.78rem;
-      font-weight: 600;
-      padding: 0.25rem 0.6rem;
-      border-radius: 99px;
-      white-space: nowrap;
-    }
+    .cmd-chip { font-size: 0.78rem; font-weight: 600; padding: 0.25rem 0.6rem; border-radius: 99px; white-space: nowrap; }
     .cmd-arm     { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
     .cmd-takeoff { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
     .cmd-land    { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
@@ -235,43 +164,28 @@
     .cmd-return  { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
     .cmd-fly     { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
     .cmd-other   { background: #f8f8f8; color: #444; border: 1px solid var(--border); }
-    .rep-badge {
-      font-size: 0.75rem;
-      color: var(--muted);
-      margin-top: 0.4rem;
-    }
+    .rep-badge   { font-size: 0.75rem; color: var(--muted); margin-top: 0.4rem; }
 
     /* ── Text/process/mavros log ───────────────────── */
     .log-list {
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      font-family: ui-monospace, 'Cascadia Code', monospace;
-      font-size: 0.8rem;
+      display: flex; flex-direction: column; gap: 1px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden;
+      font-family: ui-monospace, 'Cascadia Code', monospace; font-size: 0.8rem;
     }
     .log-line {
-      display: flex;
-      align-items: baseline;
-      gap: 0.5rem;
-      padding: 0.3rem 0.75rem;
-      line-height: 1.45;
-      border-bottom: 1px solid #f0f0f0;
+      display: flex; align-items: baseline; gap: 0.5rem;
+      padding: 0.3rem 0.75rem; line-height: 1.45; border-bottom: 1px solid #f0f0f0;
     }
     .log-line:last-child { border-bottom: none; }
     .log-line:hover { background: #fafafa; }
     .log-line.hidden { display: none; }
+    .log-line.is-pipeline-line { background: #fefce8; }
+    .log-line.is-pipeline-line:hover { background: #fef9c3; }
     .log-time { color: #999; flex-shrink: 0; font-size: 0.75rem; }
     .log-level-badge {
-      font-size: 0.7rem;
-      font-weight: 700;
-      padding: 0.05rem 0.45rem;
-      border-radius: 4px;
-      flex-shrink: 0;
-      letter-spacing: 0.03em;
+      font-size: 0.7rem; font-weight: 700; padding: 0.05rem 0.45rem;
+      border-radius: 4px; flex-shrink: 0; letter-spacing: 0.03em;
     }
     .lvl-info  { background: #dbeafe; color: #1e40af; }
     .lvl-warn  { background: #fef3c7; color: #92400e; }
@@ -281,26 +195,102 @@
     .log-source { color: #888; flex-shrink: 0; }
     .log-msg { color: var(--text); flex: 1; white-space: pre-wrap; word-break: break-all; }
     .log-msg .highlight { background: #fef08a; border-radius: 2px; }
+    .log-count { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.5rem; }
+    .empty-msg { text-align: center; padding: 2rem; color: var(--muted); font-size: 0.9rem; }
 
-    .log-count {
-      font-size: 0.8rem;
-      color: var(--muted);
-      margin-bottom: 0.5rem;
+    /* ── Pipeline section (in-log) ─────────────────── */
+    .pipeline-section {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); margin-bottom: 1.25rem; overflow: hidden;
+    }
+    .pipeline-section-hdr {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.75rem 1rem; cursor: pointer; user-select: none;
+      border-bottom: 1px solid var(--border); background: #fefce8;
+    }
+    .pipeline-section-hdr:hover { background: #fef9c3; }
+    .pipeline-section-hdr .toggle-arrow { font-size: 0.75rem; }
+    .pipeline-section-title { font-size: 0.9rem; font-weight: 600; }
+    .pipeline-section-body { display: none; padding: 1rem; display: flex; flex-direction: column; gap: 1rem; }
+
+    /* ── Pipeline card ─────────────────────────────── */
+    .pipeline-card {
+      border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+    }
+    .pipeline-card-hdr {
+      display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;
+      padding: 0.75rem 1rem; background: #f8fafc; border-bottom: 1px solid var(--border);
+    }
+    .pipeline-status {
+      font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.65rem;
+      border-radius: 99px; text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .status-success { background: #dcfce7; color: #15803d; }
+    .status-aborted { background: #fef3c7; color: #92400e; }
+    .status-failed  { background: #fee2e2; color: #991b1b; }
+    .status-unknown { background: #f3f4f6; color: #374151; }
+    .pipeline-meta-pill {
+      font-size: 0.78rem; color: var(--muted);
+      background: #f1f5f9; border-radius: 99px; padding: 0.15rem 0.6rem;
+    }
+    .pipeline-total {
+      margin-left: auto; font-size: 0.85rem; font-weight: 600; color: var(--text);
     }
 
-    .empty-msg {
-      text-align: center;
-      padding: 2rem;
-      color: var(--muted);
-      font-size: 0.9rem;
+    .pipeline-timeline { padding: 1rem; }
+    .tl-controls {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 0.75rem;
     }
+    .tl-controls-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    .tl-scale-btns { display: flex; border: 1px solid var(--border); border-radius: 5px; overflow: hidden; }
+    .tl-scale-btn {
+      padding: 0.2rem 0.6rem; font-size: 0.75rem; border: none;
+      background: var(--surface); cursor: pointer; color: var(--muted);
+    }
+    .tl-scale-btn + .tl-scale-btn { border-left: 1px solid var(--border); }
+    .tl-scale-btn.active { background: #1d4ed8; color: #fff; }
 
-    footer {
-      text-align: center;
-      padding: 2rem;
-      color: #aaa;
-      font-size: 0.85rem;
+    .tl-rows { display: flex; flex-direction: column; gap: 5px; }
+    .tl-row { display: flex; align-items: center; gap: 8px; }
+    .tl-label {
+      width: 190px; flex-shrink: 0; font-size: 0.75rem; color: var(--muted);
+      text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
+    .tl-bar-area {
+      flex: 1; height: 20px; background: #f1f5f9;
+      border-radius: 4px; position: relative; overflow: hidden;
+    }
+    .tl-bar {
+      position: absolute; height: 100%; border-radius: 4px;
+      transition: left 0.25s, width 0.25s;
+    }
+    .tl-val { width: 90px; flex-shrink: 0; font-size: 0.72rem; color: var(--muted); }
+
+    .pipeline-table-toggle {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.6rem 1rem; cursor: pointer; user-select: none;
+      font-size: 0.8rem; color: var(--muted); border-top: 1px solid var(--border);
+      background: #f8fafc;
+    }
+    .pipeline-table-toggle:hover { background: #f1f5f9; }
+    .pipeline-stage-table {
+      display: none; width: 100%; border-collapse: collapse;
+      font-size: 0.8rem; border-top: 1px solid var(--border);
+    }
+    .pipeline-stage-table.open { display: table; }
+    .pipeline-stage-table th {
+      text-align: left; padding: 0.4rem 0.75rem;
+      font-size: 0.72rem; color: var(--muted); background: #f8fafc;
+      text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .pipeline-stage-table td { padding: 0.35rem 0.75rem; border-top: 1px solid #f0f0f0; }
+    .pipeline-stage-table tr:hover td { background: #fafafa; }
+    .td-dur { font-weight: 600; font-family: ui-monospace, monospace; }
+    .td-pct { color: var(--muted); }
+    .td-slow { color: #d97706; }
+
+    footer { text-align: center; padding: 2rem; color: #aaa; font-size: 0.85rem; }
     footer a { color: #888; }
   </style>
 </head>
@@ -334,6 +324,15 @@
   </div>
 
   <div id="log-output"></div>
+
+  <div class="section-divider">Pipeline Profiler</div>
+
+  <div id="paste-panel">
+    <p class="paste-label">Paste a <code>pipeline_stages</code> log line or fragment</p>
+    <textarea id="paste-textarea" spellcheck="false"
+      placeholder="final_status=aborted stages=[{&quot;name&quot;: &quot;ingress_received&quot;, &quot;started_at&quot;: &quot;...&quot;, &quot;duration_ms&quot;: 0.016}, ...]"></textarea>
+    <div id="paste-result"></div>
+  </div>
 </main>
 
 <footer>
@@ -344,7 +343,7 @@
 (function () {
   'use strict';
 
-  /* ── DOM refs ─────────────────────────────────── */
+  /* ── DOM refs ───────────────────────────────────── */
   const dropZone    = document.getElementById('drop-zone');
   const fileInput   = document.getElementById('file-input');
   const browseLink  = document.getElementById('browse-link');
@@ -355,12 +354,13 @@
   const levelFilter = document.getElementById('level-filter');
   const resetBtn    = document.getElementById('reset-btn');
   const logOutput   = document.getElementById('log-output');
+  const pasteTA     = document.getElementById('paste-textarea');
+  const pasteResult = document.getElementById('paste-result');
 
-  /* ── File input wiring ────────────────────────── */
+  /* ── File input wiring ──────────────────────────── */
   browseLink.addEventListener('click', () => fileInput.click());
   dropZone.addEventListener('click', (e) => { if (e.target !== browseLink) fileInput.click(); });
   fileInput.addEventListener('change', () => { if (fileInput.files[0]) readFile(fileInput.files[0]); });
-
   dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); });
   dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
   dropZone.addEventListener('drop', (e) => {
@@ -369,10 +369,28 @@
     const f = e.dataTransfer.files[0];
     if (f) readFile(f);
   });
-
   resetBtn.addEventListener('click', resetUI);
 
-  /* ── File reading ─────────────────────────────── */
+  /* ── Paste panel ────────────────────────────────── */
+  let pasteTimer = null;
+  pasteTA.addEventListener('input', () => {
+    clearTimeout(pasteTimer);
+    pasteTimer = setTimeout(handlePaste, 200);
+  });
+
+  function handlePaste() {
+    const text = pasteTA.value.trim();
+    pasteResult.innerHTML = '';
+    if (!text) return;
+    const data = parsePipelineText(text);
+    if (!data) {
+      pasteResult.innerHTML = '<p style="color:#999;font-size:0.85rem;margin-top:0.5rem">Could not find a valid <code>stages=[...]</code> in the pasted text.</p>';
+      return;
+    }
+    pasteResult.appendChild(buildPipelineCard(data));
+  }
+
+  /* ── File reading ───────────────────────────────── */
   function readFile(file) {
     const reader = new FileReader();
     reader.onload = (e) => renderLog(file.name, e.target.result);
@@ -389,28 +407,25 @@
     levelFilter.innerHTML = '<option value="">All levels</option>';
   }
 
-  /* ── Log type detection ───────────────────────── */
-  const LOG_TYPES = {
+  /* ── Log type detection ─────────────────────────── */
+  const LOG_TYPE_LABELS = {
     CHAT_JSONL: 'Chat JSONL',
     TEXT_LOG:   'Mission / System Log',
     MAVROS_LOG: 'MAVROS Log',
   };
 
   function detectType(name, text) {
-    // JSONL: filename ends in .jsonl OR first line parses as JSON with session_id
     if (name.endsWith('.jsonl')) return 'CHAT_JSONL';
     const firstLine = text.split('\n')[0].trim();
     try {
       const obj = JSON.parse(firstLine);
       if (obj.session_id || obj.role) return 'CHAT_JSONL';
     } catch (_) {}
-    // MAVROS: first non-empty line matches [INFO] / [WARN] / [ERROR] + nanoseconds
     if (/^\[(?:INFO|WARN|ERROR|DEBUG|FATAL)\]\s*\[\d{10,}\]/.test(firstLine)) return 'MAVROS_LOG';
-    // Default: text log
     return 'TEXT_LOG';
   }
 
-  /* ── Entry point ─────────────────────────────── */
+  /* ── Entry point ────────────────────────────────── */
   function renderLog(name, text) {
     dropZone.style.display = 'none';
     toolbar.classList.add('visible');
@@ -418,11 +433,12 @@
     logOutput.innerHTML = '';
 
     const type = detectType(name, text);
-    typeBadge.textContent = LOG_TYPES[type];
+    typeBadge.textContent = LOG_TYPE_LABELS[type];
 
-    const size = text.length > 1024 * 1024
-      ? (text.length / (1024 * 1024)).toFixed(1) + ' MB'
-      : (text.length / 1024).toFixed(1) + ' KB';
+    const bytes = text.length;
+    const size = bytes > 1024 * 1024
+      ? (bytes / (1024 * 1024)).toFixed(1) + ' MB'
+      : (bytes / 1024).toFixed(1) + ' KB';
     fileInfo.innerHTML = `<strong>${escHtml(name)}</strong> &nbsp;${size}`;
 
     if (type === 'CHAT_JSONL') {
@@ -440,16 +456,210 @@
     }
   }
 
-  /* ══════════════════════════════════════════════
+  /* ══════════════════════════════════════════════════
+     PIPELINE PARSING & RENDERING
+  ══════════════════════════════════════════════════ */
+
+  const STAGE_COLORS = [
+    '#60a5fa','#34d399','#f97316','#a78bfa','#fb7185',
+    '#fbbf24','#38bdf8','#4ade80','#c084fc','#f472b6',
+    '#2dd4bf','#fb923c','#94a3b8','#e879f9','#86efac',
+  ];
+
+  /* Extract stages=[...] robustly with bracket counting */
+  function extractStagesJson(text) {
+    const marker = 'stages=[';
+    const idx = text.indexOf(marker);
+    if (idx === -1) return null;
+    let start = idx + marker.length - 1; // points at '['
+    let depth = 0, inStr = false, esc = false;
+    for (let i = start; i < text.length; i++) {
+      const c = text[i];
+      if (esc) { esc = false; continue; }
+      if (c === '\\' && inStr) { esc = true; continue; }
+      if (c === '"') { inStr = !inStr; continue; }
+      if (!inStr) {
+        if (c === '[' || c === '{') depth++;
+        else if (c === ']' || c === '}') { depth--; if (depth === 0) return text.slice(start, i + 1); }
+      }
+    }
+    return null;
+  }
+
+  function parsePipelineText(text) {
+    const stagesJson = extractStagesJson(text);
+    if (!stagesJson) return null;
+    let stages;
+    try { stages = JSON.parse(stagesJson); } catch (_) { return null; }
+    if (!Array.isArray(stages) || !stages.length) return null;
+
+    const result = { stages };
+    // Extract simple key=value pairs (stop before JSON blobs)
+    const re = /\b(pipeline_id|target_uav|final_status|total_duration_ms)=([^\s\[{,\]]+)/g;
+    let m;
+    while ((m = re.exec(text)) !== null) result[m[1]] = m[2];
+    return result;
+  }
+
+  /* Extract pipeline from a pipeline_stages log message */
+  function parsePipelineFromLogMsg(source, msg) {
+    if (source !== 'pipeline_profile') return null;
+    if (!msg.startsWith('pipeline_stages')) return null;
+    return parsePipelineText(msg);
+  }
+
+  function buildPipelineCard(data) {
+    const { stages, pipeline_id, target_uav, final_status, total_duration_ms } = data;
+
+    // Compute timeline bounds from stages
+    const startTimes = stages.map(s => new Date(s.started_at).getTime());
+    const endTimes   = stages.map((s, i) => startTimes[i] + s.duration_ms);
+    const tMin = Math.min(...startTimes);
+    const tMax = Math.max(...endTimes);
+    const totalSpan = tMax - tMin || 1;
+    const totalDur = total_duration_ms
+      ? parseFloat(total_duration_ms)
+      : stages.reduce((a, s) => a + s.duration_ms, 0);
+    const maxDur = Math.max(...stages.map(s => s.duration_ms));
+
+    const statusKey = (final_status || 'unknown').toLowerCase();
+    const statusClass = statusKey === 'success' ? 'status-success'
+      : statusKey === 'aborted' ? 'status-aborted'
+      : statusKey === 'failed'  ? 'status-failed'
+      : 'status-unknown';
+    const statusLabel = statusKey === 'success' ? '✓ Success'
+      : statusKey === 'aborted' ? '⚠ Aborted'
+      : statusKey === 'failed'  ? '✗ Failed'
+      : (final_status || 'Unknown');
+
+    const card = document.createElement('div');
+    card.className = 'pipeline-card';
+
+    // Header
+    card.innerHTML = `
+      <div class="pipeline-card-hdr">
+        <span class="pipeline-status ${statusClass}">${escHtml(statusLabel)}</span>
+        ${pipeline_id ? `<span class="pipeline-meta-pill" title="${escHtml(pipeline_id)}">ID: ${escHtml(pipeline_id.slice(0, 8))}…</span>` : ''}
+        ${target_uav  ? `<span class="pipeline-meta-pill">UAV: ${escHtml(target_uav)}</span>` : ''}
+        <span class="pipeline-meta-pill">${stages.length} stages</span>
+        <span class="pipeline-total">${fmtMs(totalDur)} total</span>
+      </div>
+    `;
+
+    // Timeline
+    const tlDiv = document.createElement('div');
+    tlDiv.className = 'pipeline-timeline';
+
+    // Scale toggle state
+    let logScale = false;
+
+    tlDiv.innerHTML = `
+      <div class="tl-controls">
+        <span class="tl-controls-label">Timeline</span>
+        <div class="tl-scale-btns">
+          <button class="tl-scale-btn active" data-scale="linear">Linear</button>
+          <button class="tl-scale-btn" data-scale="log">Log scale</button>
+        </div>
+      </div>
+      <div class="tl-rows"></div>
+    `;
+
+    const rowsDiv = tlDiv.querySelector('.tl-rows');
+
+    function buildRows(useLog) {
+      rowsDiv.innerHTML = '';
+      stages.forEach((stage, i) => {
+        const color = STAGE_COLORS[i % STAGE_COLORS.length];
+        const row = document.createElement('div');
+        row.className = 'tl-row';
+
+        let leftPct, widthPct;
+        if (useLog) {
+          // Log scale: width only, no offset. w = log(1+dur)/log(1+max)
+          leftPct = 0;
+          widthPct = Math.log(1 + stage.duration_ms) / Math.log(1 + maxDur) * 100;
+        } else {
+          // Linear: absolute Gantt
+          const stageStart = new Date(stage.started_at).getTime();
+          leftPct  = (stageStart - tMin) / totalSpan * 100;
+          widthPct = stage.duration_ms / totalSpan * 100;
+        }
+        widthPct = Math.max(widthPct, 0.3); // always at least a sliver
+
+        const pct = (stage.duration_ms / totalDur * 100).toFixed(1);
+        const isSlow = parseFloat(pct) >= 20;
+
+        row.innerHTML = `
+          <span class="tl-label" title="${escHtml(stage.name)}">${escHtml(stage.name)}</span>
+          <div class="tl-bar-area">
+            <div class="tl-bar" style="left:${leftPct.toFixed(2)}%;width:${widthPct.toFixed(2)}%;background:${color};opacity:0.85"></div>
+          </div>
+          <span class="tl-val ${isSlow ? 'td-slow' : ''}">${fmtMs(stage.duration_ms)} <span style="opacity:0.6">${pct}%</span></span>
+        `;
+        rowsDiv.appendChild(row);
+      });
+    }
+
+    buildRows(false);
+
+    tlDiv.querySelectorAll('.tl-scale-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        logScale = btn.dataset.scale === 'log';
+        tlDiv.querySelectorAll('.tl-scale-btn').forEach(b => b.classList.toggle('active', b === btn));
+        buildRows(logScale);
+      });
+    });
+
+    card.appendChild(tlDiv);
+
+    // Stage details table (collapsible)
+    const tableToggle = document.createElement('div');
+    tableToggle.className = 'pipeline-table-toggle';
+    tableToggle.innerHTML = '<span class="toggle-arrow">▶</span> Stage details';
+
+    const table = document.createElement('table');
+    table.className = 'pipeline-stage-table';
+    table.innerHTML = `
+      <thead><tr>
+        <th>#</th><th>Stage</th><th>Start offset</th><th>Duration</th><th>% of total</th>
+      </tr></thead>
+      <tbody></tbody>
+    `;
+    const tbody = table.querySelector('tbody');
+    stages.forEach((stage, i) => {
+      const offset = new Date(stage.started_at).getTime() - tMin;
+      const pct = (stage.duration_ms / totalDur * 100).toFixed(1);
+      const isSlow = parseFloat(pct) >= 20;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td style="color:#aaa">${i + 1}</td>
+        <td>${escHtml(stage.name)}</td>
+        <td class="td-dur">+${fmtMs(offset)}</td>
+        <td class="td-dur ${isSlow ? 'td-slow' : ''}">${fmtMs(stage.duration_ms)}</td>
+        <td class="td-pct ${isSlow ? 'td-slow' : ''}">${pct}%</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    tableToggle.addEventListener('click', () => {
+      const open = table.classList.toggle('open');
+      tableToggle.querySelector('.toggle-arrow').style.transform = open ? 'rotate(90deg)' : '';
+    });
+
+    card.appendChild(tableToggle);
+    card.appendChild(table);
+    return card;
+  }
+
+  /* ══════════════════════════════════════════════════
      CHAT JSONL renderer
-  ══════════════════════════════════════════════ */
+  ══════════════════════════════════════════════════ */
   function renderChatJsonl(text) {
     const lines = text.trim().split('\n').filter(l => l.trim());
     if (!lines.length) { logOutput.innerHTML = '<p class="empty-msg">Empty file.</p>'; return; }
 
     let sessionMeta = null;
     const messages = [];
-
     for (const line of lines) {
       let obj;
       try { obj = JSON.parse(line); } catch (_) { continue; }
@@ -459,7 +669,6 @@
 
     const container = document.createElement('div');
 
-    /* Session meta card */
     if (sessionMeta) {
       const meta = document.createElement('div');
       meta.className = 'session-meta';
@@ -478,11 +687,7 @@
 
     const chat = document.createElement('div');
     chat.className = 'chat-container';
-
-    for (const msg of messages) {
-      chat.appendChild(buildMessageEl(msg));
-    }
-
+    for (const msg of messages) chat.appendChild(buildMessageEl(msg));
     container.appendChild(chat);
     logOutput.appendChild(container);
   }
@@ -507,7 +712,6 @@
 
     const row = document.createElement('div');
     row.className = `msg-row ${role}`;
-
     const avatar = document.createElement('div');
     avatar.className = 'msg-avatar';
     avatar.textContent = role === 'user' ? 'U' : 'AI';
@@ -521,7 +725,6 @@
         ${timestamp ? `<div class="msg-time">${fmtTime(timestamp)}</div>` : ''}
       `;
     } else {
-      // assistant — content may be a string or a mission object
       if (typeof content === 'string') {
         let parsed = null;
         try { parsed = JSON.parse(content); } catch (_) {}
@@ -549,7 +752,6 @@
 
   function buildMissionEl(data, timestamp) {
     const { explanation, mission = [], repetition_count = 1 } = data;
-
     const wrap = document.createElement('div');
 
     if (explanation) {
@@ -566,9 +768,7 @@
       body.innerHTML = `<div style="font-size:0.75rem;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.4rem;">Mission (${mission.length} command${mission.length !== 1 ? 's' : ''})</div>`;
       const chips = document.createElement('div');
       chips.className = 'mission-commands';
-      for (const cmd of mission) {
-        chips.appendChild(buildCmdChip(cmd));
-      }
+      for (const cmd of mission) chips.appendChild(buildCmdChip(cmd));
       body.appendChild(chips);
       if (repetition_count && repetition_count > 1) {
         const rep = document.createElement('div');
@@ -578,7 +778,6 @@
       }
       wrap.appendChild(body);
     }
-
     return wrap;
   }
 
@@ -605,12 +804,9 @@
 
   function fmtCmd(cmd) {
     const t = cmd.type || '?';
-    const labels = {
-      arm: 'ARM',
-      land: 'LAND',
-      return_home: 'RTH',
-    };
-    if (labels[t]) return labels[t];
+    if (t === 'arm') return 'ARM';
+    if (t === 'land') return 'LAND';
+    if (t === 'return_home') return 'RTH';
     if (t === 'takeoff') return `↑ TAKEOFF${cmd.value !== undefined ? ` ${cmd.value}m` : ''}`;
     if (t === 'fly_forward') return `→ FWD ${cmd.value}m`;
     if (t === 'fly_up')   return `⬆ UP ${cmd.value}m`;
@@ -627,10 +823,9 @@
     return t.replace(/_/g, ' ').toUpperCase();
   }
 
-  /* ══════════════════════════════════════════════
-     TEXT LOG renderer  ([HH:MM:SS.mmm] LEVEL [src] msg)
-  ══════════════════════════════════════════════ */
-  // Also handles docker prefix: "container-name  | [HH:MM:SS.mmm] ..."
+  /* ══════════════════════════════════════════════════
+     TEXT LOG renderer
+  ══════════════════════════════════════════════════ */
   const TEXT_LOG_RE = /^\[(\d{2}:\d{2}:\d{2}\.\d+)\]\s+(INFO|WARNING|WARN|ERROR|DEBUG|CRITICAL|FATAL)\s+\[([^\]]+)\]\s+(.*)/;
   const DOCKER_PREFIX_RE = /^[^\s|]+\s*\|\s*/;
 
@@ -644,32 +839,65 @@
   function renderTextLog(text) {
     const lines = text.split('\n');
     const parsed = lines.map(l => parseTextLogLine(l)).filter(Boolean);
-    buildTextLogUI(parsed);
+
+    // Extract pipeline_stages entries
+    const pipelines = [];
+    const pipelineLineIndices = new Set();
+    parsed.forEach((entry, i) => {
+      const pd = parsePipelineFromLogMsg(entry.source, entry.msg);
+      if (pd) { pipelines.push(pd); pipelineLineIndices.add(i); }
+    });
+
+    // Render pipelines section above log if any found
+    if (pipelines.length) {
+      const section = document.createElement('div');
+      section.className = 'pipeline-section';
+
+      const hdr = document.createElement('div');
+      hdr.className = 'pipeline-section-hdr';
+      hdr.innerHTML = `<span class="toggle-arrow" style="transition:transform 0.2s">▶</span>
+        <span class="pipeline-section-title">Pipeline Profiles (${pipelines.length})</span>`;
+      section.appendChild(hdr);
+
+      const body = document.createElement('div');
+      body.className = 'pipeline-section-body';
+      body.style.display = 'none';
+      pipelines.forEach(pd => body.appendChild(buildPipelineCard(pd)));
+      section.appendChild(body);
+
+      hdr.addEventListener('click', () => {
+        const open = body.style.display !== 'none';
+        body.style.display = open ? 'none' : 'flex';
+        hdr.querySelector('.toggle-arrow').style.transform = open ? '' : 'rotate(90deg)';
+      });
+
+      logOutput.appendChild(section);
+    }
+
+    buildTextLogUI(parsed, pipelineLineIndices);
   }
 
-  /* ══════════════════════════════════════════════
-     MAVROS LOG renderer  ([LEVEL] [ns_timestamp] [node]: msg)
-  ══════════════════════════════════════════════ */
+  /* ══════════════════════════════════════════════════
+     MAVROS LOG renderer
+  ══════════════════════════════════════════════════ */
   const MAVROS_RE = /^\[(INFO|WARN|WARNING|ERROR|DEBUG|FATAL)\]\s+\[(\d+\.\d+)\]\s+\[([^\]]+)\]:\s+(.*)/;
 
   function parseMavrosLine(raw) {
     const m = MAVROS_RE.exec(raw.trim());
     if (!m) return null;
     const ns = parseFloat(m[2]);
-    const date = new Date(ns * 1000);
-    const time = date.toISOString().slice(11, 23); // HH:MM:SS.mmm
+    const time = new Date(ns * 1000).toISOString().slice(11, 23);
     return { time, level: normalizeLevel(m[1]), source: m[3], msg: m[4] };
   }
 
   function renderMavrosLog(text) {
     const lines = text.split('\n');
     const parsed = lines.map(l => parseMavrosLine(l)).filter(Boolean);
-    buildTextLogUI(parsed);
+    buildTextLogUI(parsed, new Set());
   }
 
-  /* ── Shared text log UI builder ────────────── */
-  function buildTextLogUI(entries) {
-    /* populate level filter */
+  /* ── Shared text log UI builder ─────────────────── */
+  function buildTextLogUI(entries, pipelineLineIndices) {
     const levels = [...new Set(entries.map(e => e.level))].sort();
     levelFilter.innerHTML = '<option value="">All levels</option>' +
       levels.map(l => `<option value="${l}">${l}</option>`).join('');
@@ -681,9 +909,11 @@
     const list = document.createElement('div');
     list.className = 'log-list';
 
-    const lineEls = entries.map(entry => {
+    const msgTexts = entries.map(e => e.msg);
+
+    const lineEls = entries.map((entry, idx) => {
       const el = document.createElement('div');
-      el.className = 'log-line';
+      el.className = 'log-line' + (pipelineLineIndices && pipelineLineIndices.has(idx) ? ' is-pipeline-line' : '');
       el.dataset.level = entry.level;
       el.dataset.raw = (entry.source + ' ' + entry.msg).toLowerCase();
       el.innerHTML = `
@@ -702,27 +932,23 @@
       const q = searchInput.value.toLowerCase().trim();
       const lv = levelFilter.value;
       let shown = 0;
-      for (const el of lineEls) {
+      lineEls.forEach((el, idx) => {
         const lvMatch = !lv || el.dataset.level === lv;
         const qMatch  = !q  || el.dataset.raw.includes(q);
         const visible = lvMatch && qMatch;
         el.classList.toggle('hidden', !visible);
         if (visible) {
-          // highlight search term
           const msgSpan = el.querySelector('.log-msg');
           if (q) {
-            const escaped = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-            msgSpan.innerHTML = escHtml(el.dataset.raw.slice(el.dataset.raw.indexOf(' ') + 1))
-              .replace(new RegExp(escHtml(q).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'),
-                m => `<span class="highlight">${m}</span>`);
+            const safe = escHtml(msgTexts[idx]);
+            const safeQ = escHtml(q).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            msgSpan.innerHTML = safe.replace(new RegExp(safeQ, 'gi'), m => `<span class="highlight">${m}</span>`);
           } else {
-            msgSpan.innerHTML = escHtml(el.querySelector('.log-msg').textContent || '');
-            // restore from data
-            msgSpan.textContent = entries[lineEls.indexOf(el)].msg;
+            msgSpan.textContent = msgTexts[idx];
           }
           shown++;
         }
-      }
+      });
       countEl.textContent = `Showing ${shown} of ${lineEls.length} lines`;
     }
 
@@ -730,12 +956,10 @@
     levelFilter.addEventListener('change', updateFilter);
     countEl.textContent = `${lineEls.length} lines`;
 
-    if (!entries.length) {
-      list.innerHTML = '<p class="empty-msg">No parseable log lines found.</p>';
-    }
+    if (!entries.length) list.innerHTML = '<p class="empty-msg">No parseable log lines found.</p>';
   }
 
-  /* ── Helpers ──────────────────────────────── */
+  /* ── Helpers ─────────────────────────────────────── */
   function normalizeLevel(l) {
     if (!l) return 'INFO';
     l = l.toUpperCase();
@@ -752,25 +976,30 @@
     return 'lvl-other';
   }
 
+  function fmtMs(ms) {
+    if (ms === undefined || ms === null) return '—';
+    ms = parseFloat(ms);
+    if (ms >= 60000) return (ms / 60000).toFixed(1) + 's'; // show minutes as seconds for large values
+    if (ms >= 1000) return (ms / 1000).toFixed(2) + 's';
+    if (ms >= 1) return ms.toFixed(1) + 'ms';
+    return ms.toFixed(3) + 'ms';
+  }
+
   function escHtml(str) {
     return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
   function fmtTime(iso) {
     try {
-      const d = new Date(iso);
-      return d.toLocaleTimeString(undefined, { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      return new Date(iso).toLocaleTimeString(undefined, { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
     } catch (_) { return iso; }
   }
 
   function fmtDatetime(iso) {
     try {
-      const d = new Date(iso);
-      return d.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'medium' });
+      return new Date(iso).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'medium' });
     } catch (_) { return iso; }
   }
 })();
