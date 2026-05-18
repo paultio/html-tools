@@ -71,8 +71,10 @@
       gap: 0.5rem;
     }
 
+    #sidebar-top-btns { display: flex; gap: 0.4rem; }
+
     #open-folder-btn {
-      width: 100%;
+      flex: 1;
       padding: 0.55rem 0.75rem;
       background: var(--accent);
       color: #fff;
@@ -87,7 +89,26 @@
       gap: 0.5rem;
     }
     #open-folder-btn:hover { background: #1e40af; }
-    #folder-input { display: none; }
+
+    #refresh-btn {
+      padding: 0.55rem 0.65rem;
+      background: #f1f5f9; color: #374151;
+      border: 1px solid var(--border); border-radius: 6px;
+      font-size: 1rem; cursor: pointer; flex-shrink: 0;
+      display: none; line-height: 1;
+    }
+    #refresh-btn.visible { display: block; }
+    #refresh-btn:hover { background: #e2e8f0; }
+    #refresh-btn.spinning { animation: spin 0.6s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    #open-file-link {
+      font-size: 0.78rem; color: var(--accent); cursor: pointer;
+      text-decoration: underline; text-underline-offset: 2px; display: none;
+    }
+    #open-file-link.visible { display: block; }
+
+    #folder-input, #file-input { display: none; }
 
     #sidebar-search {
       padding: 0.4rem 0.6rem;
@@ -220,19 +241,23 @@
     }
 
     #welcome {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-      color: var(--muted);
-      padding: 2rem;
-      text-align: center;
+      padding: 2rem 1.25rem 1rem;
     }
-    #welcome svg { width: 48px; height: 48px; stroke: #ccc; }
-    #welcome h2 { font-size: 1.1rem; font-weight: 600; color: #888; }
-    #welcome p  { font-size: 0.875rem; max-width: 340px; line-height: 1.5; }
+
+    #viewer-drop {
+      border: 2px dashed #ddd;
+      border-radius: var(--radius);
+      background: var(--surface);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    #viewer-drop.drag-over { border-color: var(--accent); background: #eff6ff; }
+    #viewer-drop svg { width: 36px; height: 36px; stroke: #ccc; margin-bottom: 0.75rem; }
+    #viewer-drop p { font-size: 0.875rem; color: var(--muted); }
+    #viewer-drop a { color: var(--accent); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+    #viewer-drop .hint { font-size: 0.75rem; color: #bbb; margin-top: 0.4rem; }
 
     #log-wrapper {
       flex: 1;
@@ -243,6 +268,14 @@
       gap: 1rem;
     }
     #log-wrapper.visible { display: flex; }
+
+    #paste-section {
+      padding: 0 1.25rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      flex-shrink: 0;
+    }
 
     /* ── Toolbar ────────────────────────────────── */
     #toolbar {
@@ -454,11 +487,16 @@
   <!-- ── Sidebar ──────────────────────────────── -->
   <aside id="sidebar">
     <div id="sidebar-top">
-      <button id="open-folder-btn">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-        Open Logs Folder
-      </button>
+      <div id="sidebar-top-btns">
+        <button id="open-folder-btn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          Open Logs Folder
+        </button>
+        <button id="refresh-btn" title="Reload folder">↺</button>
+      </div>
       <input type="file" id="folder-input" webkitdirectory multiple />
+      <input type="file" id="file-input" accept=".jsonl,.log,.txt" />
+      <a id="open-file-link">↑ Open single file…</a>
       <input type="text" id="sidebar-search" placeholder="Filter files…" autocomplete="off" />
     </div>
 
@@ -476,12 +514,15 @@
   <div id="viewer-panel">
 
     <div id="welcome">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
-        <polyline points="13 2 13 9 20 9"/>
-      </svg>
-      <h2>Select a file to view</h2>
-      <p>Open your logs folder in the sidebar, then click any file to inspect it.</p>
+      <div id="viewer-drop">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 16v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1"/>
+          <polyline points="8 12 12 8 16 12"/>
+          <line x1="12" y1="8" x2="12" y2="20"/>
+        </svg>
+        <p><strong>Drop a log file here</strong> or <a id="browse-file-link">browse</a></p>
+        <p class="hint">or use the sidebar to browse a logs folder</p>
+      </div>
     </div>
 
     <div id="log-wrapper">
@@ -494,9 +535,10 @@
       </div>
 
       <div id="log-output"></div>
+    </div>
 
+    <div id="paste-section">
       <div class="section-divider">Pipeline Profiler</div>
-
       <div id="paste-panel">
         <p class="paste-label">Paste a pipeline_stages line or fragment</p>
         <textarea id="paste-textarea" spellcheck="false"
@@ -516,13 +558,17 @@
 
   /* ── DOM refs ─────────────────────────────────────── */
   const openFolderBtn  = document.getElementById('open-folder-btn');
+  const refreshBtn     = document.getElementById('refresh-btn');
+  const openFileLink   = document.getElementById('open-file-link');
   const folderInput    = document.getElementById('folder-input');
+  const fileInput      = document.getElementById('file-input');
   const sidebarDrop    = document.getElementById('sidebar-drop');
   const sidebarSearch  = document.getElementById('sidebar-search');
   const fileTree       = document.getElementById('file-tree');
   const welcome        = document.getElementById('welcome');
+  const viewerDrop     = document.getElementById('viewer-drop');
+  const browseFileLink = document.getElementById('browse-file-link');
   const logWrapper     = document.getElementById('log-wrapper');
-  const toolbar        = document.getElementById('toolbar');
   const fileInfo       = document.getElementById('file-info');
   const typeBadge      = document.getElementById('log-type-badge');
   const searchInput    = document.getElementById('search-input');
@@ -532,9 +578,11 @@
   const pasteResult    = document.getElementById('paste-result');
 
   /* ── State ────────────────────────────────────────── */
-  let folderFiles = [];   // Array of { file, relativePath, meta, text? }
+  let folderFiles  = [];   // Array of { file, relativePath, meta, text? }
   let selectedPath = null;
-  const textCache  = {};  // relativePath → full text
+  const textCache  = {};   // relativePath → full text
+  let lastDirHandle = null; // for refresh via showDirectoryPicker
+  let lastItems     = null; // for refresh via webkitdirectory / drop
 
   /* ══════════════════════════════════════════════════
      FOLDER LOADING
@@ -543,6 +591,8 @@
     if ('showDirectoryPicker' in window) {
       try {
         const handle = await window.showDirectoryPicker({ mode: 'read' });
+        lastDirHandle = handle;
+        lastItems = null;
         const items = await collectFromHandle(handle, handle.name + '/');
         await processItems(items);
       } catch (e) {
@@ -559,8 +609,63 @@
       file: f,
       relativePath: f.webkitRelativePath || f.name,
     }));
+    lastDirHandle = null;
+    lastItems = items;
     processItems(items);
   });
+
+  /* ── Refresh ─────────────────────────────────────── */
+  refreshBtn.addEventListener('click', async () => {
+    refreshBtn.classList.add('spinning');
+    try {
+      if (lastDirHandle) {
+        const items = await collectFromHandle(lastDirHandle, lastDirHandle.name + '/');
+        await processItems(items, /* keepSelected */ true);
+      } else if (lastItems) {
+        await processItems(lastItems, /* keepSelected */ true);
+      }
+    } finally {
+      refreshBtn.classList.remove('spinning');
+    }
+  });
+
+  /* ── Single file ─────────────────────────────────── */
+  openFileLink.addEventListener('click', () => fileInput.click());
+  browseFileLink.addEventListener('click', () => fileInput.click());
+
+  fileInput.addEventListener('change', () => {
+    if (!fileInput.files[0]) return;
+    loadSingleFile(fileInput.files[0]);
+    fileInput.value = '';
+  });
+
+  viewerDrop.addEventListener('dragover', (e) => {
+    if (e.dataTransfer.types.includes('Files')) { e.preventDefault(); viewerDrop.classList.add('drag-over'); }
+  });
+  viewerDrop.addEventListener('dragleave', () => viewerDrop.classList.remove('drag-over'));
+  viewerDrop.addEventListener('drop', async (e) => {
+    e.preventDefault();
+    viewerDrop.classList.remove('drag-over');
+    const item = e.dataTransfer.items[0];
+    if (!item || item.kind !== 'file') return;
+    const entry = item.webkitGetAsEntry?.();
+    if (entry?.isDirectory) {
+      // Folder dropped on viewer → hand off to sidebar logic
+      const items = [];
+      await collectFromEntry(entry, entry.name + '/', items);
+      lastDirHandle = null;
+      lastItems = items;
+      await processItems(items);
+    } else {
+      loadSingleFile(item.getAsFile());
+    }
+  });
+
+  function loadSingleFile(file) {
+    const reader = new FileReader();
+    reader.onload = (e) => renderLog(file.name, e.target.result);
+    reader.readAsText(file);
+  }
 
   /* Folder drag-and-drop on sidebar */
   const sidebar = document.getElementById('sidebar');
@@ -586,7 +691,11 @@
         }
       }
     }
-    if (items.length) processItems(items);
+    if (items.length) {
+      lastDirHandle = null;
+      lastItems = items;
+      processItems(items);
+    }
   });
 
   async function collectFromHandle(handle, pathPrefix) {
@@ -621,17 +730,20 @@
   }
 
   /* ── processItems: scan & build sidebar ──────────── */
-  async function processItems(items) {
+  async function processItems(items, keepSelected = false) {
     const filtered = items.filter(({ relativePath }) => {
       const name = relativePath.split('/').pop();
       return !name.startsWith('.') && /\.(log|jsonl|txt)$/i.test(name);
     });
 
+    if (!keepSelected) selectedPath = null;
     folderFiles = [];
     fileTree.innerHTML = '';
     sidebarDrop.style.display = 'none';
     fileTree.classList.add('visible');
     sidebarSearch.classList.add('visible');
+    refreshBtn.classList.add('visible');
+    openFileLink.classList.add('visible');
 
     // Show placeholder items first, then scan metadata in batches
     const placeholders = filtered.map(item => ({ ...item, meta: null }));
@@ -861,7 +973,7 @@
      LOG RENDERING (unchanged from before)
   ══════════════════════════════════════════════════ */
   function renderLog(name, text) {
-    welcome.style.display = 'none';
+    welcome.style.display  = 'none';
     logWrapper.classList.add('visible');
     logOutput.innerHTML = '';
     pasteResult.innerHTML = '';
